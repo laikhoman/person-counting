@@ -1,0 +1,207 @@
+{% extends "base.html" %}
+
+{% block title %}People Counting{% endblock %}
+
+{% block page_content %}
+	<div class="row">
+		<div class="col s12 m12">
+			<h3 class="grey-text"></h3>
+		</div>
+	</div>
+
+    <div class="row">
+        <div class="row valign-wrapper" >
+            <div class="col s12 m6">
+                {% if add_edit_string == "Add_Place" %}
+                    <a href="{{ url_for('main.add_place', add_edit_string=add_edit_string ) }}" style="float: right;">{{ add_edit_string }}</a>
+                {% else %}
+                    <a href="{{ url_for('main.edit_place', add_edit_string=add_edit_string ) }}" style="float: right;">{{ add_edit_string }}</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+		<div class="col s12 m4">
+			<div class="card-panel deep-purple lighten-3 z-depth-3">
+				<div class="row valign-wrapper">
+					<div class="col s12 m6">
+						<i class="large material-icons white-text right">insert_chart</i>
+					</div>
+					<div class="col s12 m6">
+						<h3><span class="white-text">{{ total_entries }}</span></h3>
+						<span class="white-text">total entries</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col s12 m4">
+			<div class="card-panel deep-purple lighten-3 z-depth-3">
+				<div class="row valign-wrapper">
+					<div class="col s12 m6">
+						<i class="large material-icons white-text right">insert_chart</i>
+					</div>
+					<div class="col s12 m6">
+						<h3><span class="white-text">{{ total_in }}</span></h3>
+						<span class="white-text">total in</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col s12 m4">
+			<div class="card-panel deep-purple lighten-3 z-depth-3">
+				<div class="row valign-wrapper">
+					<div class="col s12 m6">
+						<i class="large material-icons white-text right">insert_chart</i>
+					</div>
+					<div class="col s12 m6">
+						<h3><span class="white-text">{{ total_out }}</span></h3>
+						<span class="white-text">total out</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+    <div class="row">
+        <canvas id="myChart1" width="100%"></canvas>
+        <canvas id="myChart2" width="100%"></canvas>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.js" integrity="sha256-H9jAz//QLkDOy/nzE9G4aYijQtkLt9FvGmdUTwBk6gs=" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.js" integrity="sha256-dgFbqbQVzjkZPQxWd8PBtzGiRBhChc4I2wO/q/s+Xeo=" crossorigin="anonymous"></script>
+		<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/locale/id.js" integrity="sha256-5aLk1fogTLyWd3GNewO2j33+AtT02NYcGkkskO+3EQQ=" crossorigin="anonymous"></script> -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.css" integrity="sha256-IvM9nJf/b5l2RoebiFno92E5ONttVyaEEsdemDC6iQA=" crossorigin="anonymous" />
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.js" integrity="sha256-arMsf+3JJK2LoTGqxfnuJPFTU4hAK57MtIPdFpiHXOU=" crossorigin="anonymous"></script>
+        <script>
+        function formatDate(date) {
+          var hour = (date.getUTCHours() + 7) % 24 ;
+          var minute = date.getUTCMinutes();
+
+          return hour + ':' + minute;
+        }
+		var ctx1 = document.getElementById('myChart1').getContext('2d');
+		var ctx2 = document.getElementById('myChart2').getContext('2d');
+        var inLabelList = []
+        var outLabelList = []
+        var inCountList = []
+        var outCountList = []
+        var in_datetime_list = {{ in_datetime_list|safe }};
+        var out_datetime_list = {{ out_datetime_list|safe }};
+        var in_count_list = {{ in_count_list|safe }};
+        var out_count_list = {{ out_count_list|safe }};
+
+        for(var i = 0; i < in_datetime_list.length; i++){
+            inLabelList.push(formatDate(new Date(in_datetime_list[i])));
+        }
+
+        for(var i = 0; i < out_datetime_list.length; i++){
+            outLabelList.push(formatDate(new Date(out_datetime_list[i])));
+        }
+
+        for(var i = 0; i < in_count_list.length; i++){
+            inCountList.push(in_count_list[i]);
+        }
+
+        for(var i = 0; i < out_count_list.length; i++){
+            outCountList.push(out_count_list[i]);
+        }
+
+        console.log(inLabelList);
+        console.log(outLabelList);
+        console.log(inCountList);
+        console.log(outCountList);
+
+        var in_result = {};
+        inLabelList.forEach((inLabelList, i) => in_result[inLabelList] = inCountList[i]);
+        console.log(in_result);
+
+        var out_result = {};
+        outLabelList.forEach((outLabelList, i) => out_result[outLabelList] = outCountList[i]);
+        console.log(out_result);
+
+
+		 var myLineChart1 = new Chart(ctx1, {
+		    type: 'line',
+		    data: {
+                labels: inLabelList,
+                datasets: [{
+                    label: 'IN',
+                    borderColor: 'rgb(255, 99, 0)',
+                    scaleOverride: false,
+                    scaleStartValue: 0,
+                    fill: false,
+                    data: inCountList
+                }]
+            },
+		    options: {
+		        responsive: true,
+		        scales: {
+		            xAxes: [{
+		                type: 'time',
+		                time: {
+		                    parser: "HH:mm",
+                            unit: 'hour',
+                            unitStepSize: 1,
+                            round: 'hour',
+                            tooltipFormat: "h:mm:ss a",
+                            displayFormats: {
+                                hour: 'h:mm A',
+                                min: '00:00',
+                                max: '23:59'
+                            }
+                        },
+                        ticks: {
+                            min: new Date('2013-02-08 00:00:00'),
+                            max: new Date('2099-02-08 16:00:00')
+                        }
+		            }],
+		            yAxes: [{
+		            	stacked: true
+		            }]
+		        }
+		    }
+		});
+		var myLineChart2 = new Chart(ctx2, {
+		    type: 'line',
+		    data: {
+                labels: inLabelList,
+                datasets: [{
+                    label: 'OUT',
+                    borderColor: 'rgb(255, 99, 132)',
+                    scaleOverride: false,
+                    scaleStartValue: 0,
+                    fill: false,
+                    data: outCountList
+                }]
+            },
+		    options: {
+		        responsive: true,
+		        scales: {
+		            xAxes: [{
+		                type: 'time',
+		                time: {
+		                    parser: "HH:mm",
+                            unit: 'hour',
+                            unitStepSize: 1,
+                            round: 'hour',
+                            tooltipFormat: "h:mm:ss a",
+                            displayFormats: {
+                                hour: 'h:mm A',
+                                min: '00:00',
+                                max: '23:59'
+                            }
+                        },
+                        ticks: {
+                            min: new Date('2013-02-08 00:00:00'),
+                            max: new Date('2099-02-08 16:00:00')
+                        }
+		            }],
+		            yAxes: [{
+		            	stacked: true
+		            }]
+		        }
+		    }
+		});
+		</script>
+    </div>
+
+{% endblock %}

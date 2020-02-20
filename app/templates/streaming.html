@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block page_content %}
+
+<div class="row">
+	<div class="col s12">
+		<div class="row">
+            <div class="col s12 m6">
+                <h2 class="black-text">CCTV Streaming</h2>
+                {% if add_edit_string == "Add_Camera_On_Place" %}
+                    <h4 class="black-text">Add Line On Camera</h4>
+                    <a class="waves-effect waves-light light-green btn" href="{{ url_for('main.line', cctv_id=cctv_id, place_id=place_id, add_edit_string="Add Line On Camera")}}">Make Line</a>
+                {% else %}
+                    <h4 class="black-text">Edit Line On Camera</h4>
+                    <a class="waves-effect waves-light light-green btn" href="{{ url_for('main.line', cctv_id=cctv_id, place_id=place_id, add_edit_string="Edit Line On Camera")}}">Edit Line</a>
+                {% endif %}
+
+            </div>
+		</div>
+	</div>
+</div>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css" rel="stylesheet" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+{% endblock %}

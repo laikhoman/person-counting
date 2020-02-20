@@ -1,0 +1,71 @@
+{% extends "material/base.html" %}
+{% import "material/utils.html" as util %}
+{% import "material/wtf.html" as wtf %}
+
+{% block title %}Person Counting{% endblock %}
+
+{% block head %}
+	{{ super() }}
+
+    {% block metas %}
+        {{ super() }}
+    {% endblock %}
+
+
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-1.10.2.min.js') }}"></script>
+{% endblock %}
+
+{% block navbar %}
+<nav>
+	<div class="nav-wrapper light-green darken-1">
+		<a href="#!" class="brand-logo">Person Counting</a>
+		<a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+		<ul class="right hide-on-med-and-down">
+			<li><a href="/">Dashboard</a></li>
+			{# <li><a href="collapsible.html">Support Us</a></li> #}
+			<li><a href="/support">Support Us</a></li>
+		</ul>
+	</div>
+</nav>
+
+<ul class="sidenav" id="mobile-demo">
+	<li><a href="/">Dashboard</a></li>
+	<li><a href="/cameras">Camera</a></li>
+	{# <li><a href="collapsible.html">Javascript</a></li> #}
+	<li><a href="/support">Support Us</a></li>
+</ul>
+{% endblock %}
+{% block content %}
+{{ container() }}
+        {% block page_content %}{% endblock %}
+{{ enddiv() }}
+
+{% endblock %}
+
+{% block footer %}
+<footer class="page-footer light-green darken-1 style="position: fixed; width: 100%; left: 0; bottom:0;" >
+	{# <div class="container">
+		<div class="row">
+			<div class="col l6 s12">
+				<h5 class="white-text">XiHuan</h5>
+				<p class="grey-text text-lighten-4">You can use rows and columns here to organize your footer content.</p>
+			</div>
+			<div class="col l4 offset-l2 s12">
+				<h5 class="white-text">Links</h5>
+				<ul>
+					<li><a class="grey-text text-lighten-3" href="#!">Link 1</a></li>
+					<li><a class="grey-text text-lighten-3" href="#!">Link 2</a></li>
+					<li><a class="grey-text text-lighten-3" href="#!">Link 3</a></li>
+					<li><a class="grey-text text-lighten-3" href="#!">Link 4</a></li>
+				</ul>
+			</div>
+		</div>
+	</div> #}
+	<div class="footer-copyright">
+		<div class="container">
+			© 2020 XiHuan
+			<a class="grey-text text-lighten-4 right" href="#!">More Links</a>
+		</div>
+	</div>
+</footer>
+{% endblock %}

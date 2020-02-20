@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block page_content %}
+
+<div class="row">
+	<div class="col s12 m3">
+
+	</div>
+	<div class="col s12">
+		<div class="row">
+            <div class="col s12 m6">
+                <h4 class="black-text">Edit Camera On Store</h4>
+                <h6 class="grey-text">Update the detail of CCTV / IP camera(s). </h6>
+                <form action="{{ url_for('main.add_cctv', place_id=place_id) }}" method="POST" class="col s12">
+                    {{ form.csrf_token }}
+                    <div class="row">
+                        <div class="input-field col s12 m6">
+                            <input id="label" name="label" type="text" class="validate">
+                            <label for="label">Label</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12 m6">
+                            <input id="url" name="url" type="text" class="validate">
+                            <label for="url">URL</label>
+                        </div>
+                    </div>
+                    <input class="waves-effect waves-light light-green btn" name="add_cctv" type="submit" href="{{ url_for('main.add_cctv', place_id=place_id) }}">
+                </form>
+            </div>
+            <div class="col s12 m6">
+                <img src="{{ url_for('static', filename='images/magazine.png') }}" alt="Test" width="350" height="350">
+            </div>
+		</div>
+	</div>
+</div>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css" rel="stylesheet" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+{% endblock %}

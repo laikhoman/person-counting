@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}People Counting{% endblock %}
+
+{% block page_content %}
+
+    <div class="row">
+        <div class="row valign-wrapper" >
+            <div class="col s12 m6">
+                <h4>{{ place_name }}</h4>
+                <h6>at {{ city }} city</h6>
+            </div>
+            <div class="col s12 m6">
+                <a href="{{ url_for('main.list_cctv', cctv_id=cctv_id) }}">CCTV List</a> <br>
+                <a href="" style="float:right;">Add CCTV</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        {% for segment in cctv %}
+            <br>
+            <a href="/view_chart/{{ segment['id'] }}">
+                <div class="col s12 m4">
+                    <div class="row valign-wrapper" >
+                        <canvas id="myChart"  resize style = "float: left; border-radius: 15px;"></canvas>
+
+                        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.js" integrity="sha256-H9jAz//QLkDOy/nzE9G4aYijQtkLt9FvGmdUTwBk6gs=" crossorigin="anonymous"></script>
+		                <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.js" integrity="sha256-dgFbqbQVzjkZPQxWd8PBtzGiRBhChc4I2wO/q/s+Xeo=" crossorigin="anonymous"></script>
+                        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.css" integrity="sha256-IvM9nJf/b5l2RoebiFno92E5ONttVyaEEsdemDC6iQA=" crossorigin="anonymous" />
+                        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.js" integrity="sha256-arMsf+3JJK2LoTGqxfnuJPFTU4hAK57MtIPdFpiHXOU=" crossorigin="anonymous"></script>
+                        <script>
+                        var ctx = document.getElementById('myChart').getContext('2d');
+                        labelList = [new Date('2013-02-08 09:30:26'), new Date('2013-02-08 10:32:26'), new Date('2013-02-08 11:40:26'), new Date('2013-02-08 15:42:26'), new Date('2013-02-08 19:42:26')]
+
+                         var myLineChart = new Chart(ctx, {
+                            type: 'line',
+                            data: {
+                                labels: labelList,
+                                datasets: [{
+                                    label: 'My First dataset',
+                                    borderColor: 'rgb(255, 99, 132)',
+                                    scaleOverride: false,
+                                    scaleStartValue: 0,
+                                    fill: false,
+                                    data: [1, 10, 12, 4, 8, 51]
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                scales: {
+                                    xAxes: [{
+                                        type: 'time',
+                                        time: {
+                                            unit: 'hour',
+                                            unitStepSize: 6,
+                                            round: 'hour',
+                                            tooltipFormat: "h:mm:ss a",
+                                            displayFormats: {
+                                                hour: 'MMM D, h:mm A'
+                                            }
+                                        },
+                                        ticks: {
+                                            min: new Date('2013-02-08 00:00:00'),
+                                            max: new Date('2013-02-08 16:00:00')
+                                        }
+                                    }],
+                                    yAxes: [{
+                                        stacked: true
+                                    }]
+                                }
+                            }
+                        });
+                        </script>
+                    </div>
+                    <div class="row valign-wrapper" >
+                        <div class="col s12 m12">
+                            <h6><span class="black-text">{{ segment['label'] }}</span></h6>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+
+{% endblock %}

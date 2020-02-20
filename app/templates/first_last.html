@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %}People Counting{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <script>
+        window.addEventListener("load", function() {
+            var now = new Date();
+            var utcString = now.toISOString().substring(0,19);
+            var year = now.getFullYear();
+            var month = now.getMonth() + 1;
+            var day = now.getDate();
+            var hour = now.getHours();
+            var minute = now.getMinutes();
+            var second = now.getSeconds();
+            var localDatetime = year + "-" +
+                              (month < 10 ? "0" + month.toString() : month) + "-" +
+                              (day < 10 ? "0" + day.toString() : day) + "T" +
+                              (hour < 10 ? "0" + hour.toString() : hour) + ":" +
+                              (minute < 10 ? "0" + minute.toString() : minute) +
+                              utcString.substring(16,19);
+            var datetimeField = document.getElementById("myLocalDate");
+            datetimeField.value = localDatetime;
+        });
+    </script>
+
+    <script>
+        var date ;
+
+        function yourFunc(val) {
+            console.log(val);
+            date = val;
+            var jqXHR = $.ajax({
+                type: "GET",
+                dataType:'json',
+                url: "{{ url_for('main.get_first_last', date_string=val) }}",
+                async: true,
+                contentType: "application/json"
+            });
+        }
+
+        function myFunction() {
+            console.log("date",typeof(date));
+            var jqXHR = $.ajax({
+                type: "GET",
+                dataType:'json',
+                url: "{{ url_for('main.get_first_last', date_string=date) }}",
+                async: true,
+                contentType: "application/json"
+            });
+        }
+    </script>
+
+{% endblock %}
+
+{% block page_content %}
+    <div class="row">
+        <div class="row valign-wrapper" >
+            <div class="col s12 m6">
+                Date: <input type="datetime-local" id="myLocalDate" onchange="yourFunc(value)">
+            </div>
+            <div class="col s12 m6">
+                <button onclick="myFunction()">query</button>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="row valign-wrapper" >
+            <div class="col s12 m6">
+                <h3 id="in_datetime_string"></h3>
+                <img id="in_datetime_image">
+            </div>
+            <div class="col s12 m6">
+                <h3 id="out_datetime_string"></h3>
+                <img id="out_datetime_image">
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col s12 m6">
+            <form action="{{ url_for('main.query_date') }}" method="POST" class="col s12">
+                <div class="row">
+                    <div class="input-field col s12 m6">
+                        <input id="date" name="date" type="text" class="validate">
+                        <label for="date">Date</label>
+                    </div>
+                </div>
+                <input class="waves-effect waves-light light-green btn" name="query_date" type="submit" href="{{ url_for('main.query_date') }}">
+            </form>
+        </div>
+    </div>
+
+
+{% endblock %}

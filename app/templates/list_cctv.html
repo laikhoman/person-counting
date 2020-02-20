@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}People Counting{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <script>
+        function doStuff() {
+            console.log("Hello World!")
+        }
+
+        function toggle(button,cctv_id) {
+            if(button.value=="OFF") {
+                var jqXHR = $.ajax({
+                    type: "GET",
+                    dataType:'json',
+                    url: "{{ url_for('main.activate_cctv', cctv_id=cctv_id, active=0) }}",
+                    async: true,
+                    accept: "application/json",
+                    contentType: "application/json"
+                });
+                button.value="ON"
+                button.innerHTML="ON"
+                this.interval = setInterval(doStuff, 1000);
+            } else if(button.value=="ON") {
+                var jqXHR = $.ajax({
+                    type: "GET",
+                    dataType:'json',
+                    url: "{{ url_for('main.activate_cctv', cctv_id=cctv_id, active=1) }}",
+                    async: true,
+                    accept: "application/json",
+                    contentType: "application/json"
+                });
+                button.value="OFF"
+                button.innerHTML="OFF"
+                clearInterval(this.interval)
+            }
+        }
+    </script>
+{% endblock %}
+
+{% block page_content %}
+    <div class="row">
+        <div class="row valign-wrapper" >
+            <div class="col s12 m6">
+                <h4>{{ place_name }}</h4>
+                <h6>at {{ city }} city</h6>
+            </div>
+<!--            <div class="col s12 m6">-->
+<!--                <a href="{{ url_for('main.list_report_by_cctv_id', cctv_id=cctv_id) }}">View Visualization</a><br>-->
+<!--            </div>-->
+        </div>
+    </div>
+
+    <div class="row">
+        {% for segment in cctv %}
+            <br>
+                <div class="col s12 m4">
+                    <a href="/video_feed_by_address/{{ segment['id'] }}">
+                        <div class="row valign-wrapper" >
+                            <canvas id="canvas" resize style="background: url('http://localhost:5000/get_rtsp_image_by_address/{{ segment['id'] }}');; float: left; border-radius: 15px;"></canvas>
+                        </div>
+                        <div class="row valign-wrapper" >
+                            <div class="col s12 m12">
+                                <h6><span class="black-text">{{ segment['label'] }}</span></h6>
+                            </div>
+                        </div>
+                    </a>
+                    {% if on_off == "off" %}
+                        <button onclick="toggle(this, {{ segment['id'] }})" value="ON">ON</button>
+                    {% else %}
+                        <button onclick="toggle(this, {{ segment['id'] }})" value="OFF">OFF</button>
+                    {% endif %}
+                </div>
+
+        {% endfor %}
+    </div>
+
+{% endblock %}

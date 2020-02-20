@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}People Counting{% endblock %}
+
+{% block page_content %}
+	<div class="row">
+		<div class="col s12 m12">
+			<h3 class="grey-text"></h3>
+		</div>
+	</div>
+
+    <div class="row">
+        <div class="row valign-wrapper" >
+            <div class="col s12 m6">
+                <h4>Your cctv of places: {{ place_name }}</h4>
+            </div>
+            <div class="col s12 m6">
+                <a href="/cameras" style="float: right;">Add Camera</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        {% for segment in cctv %}
+            <a href={{ url_for('main.cctv', cctv_id=segment['id']) }}>
+                <div class="col s12 m4">
+                    <div class="row valign-wrapper" >
+                        <div class="col s12 m12">
+                            <h5><span class="black-text">{{ segment['label'] }}</span></h5>
+                            <h6><span class="black-text">at {{ segment['url'] }}</span></h6>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+
+{% endblock %}

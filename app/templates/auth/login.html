@@ -1,0 +1,50 @@
+{% extends "material/base.html" %}
+
+{% block title %}People Counting{% endblock %}
+
+{% block head %}
+	{{ super() }}
+
+	<!-- Compiled and minified CSS -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+	<style type="text/css">
+	</style>
+{% endblock %}
+
+{% block content %}
+	<div class="container z-depth-2 valign-wrapper" style="height: 500px; margin: 90px auto; padding: 0 50px">
+		<div class="row">
+			<div class="col l7 center-align">
+		      	<h5>Gambar SVG</h5>
+		    </div>
+		    <div class="col l5">
+		    	<div class="row">
+		    		<form action="/login" method="POST">
+		    			{{ form.csrf_token }}
+						<div class="input-field col s12">
+					      <h5>Sign In</h5>
+					    </div>
+			      		<div class="input-field col s12">
+					      <input name="email" id="email" type="email" class="validate">
+					      <label for="email">Email</label>
+					    </div>
+					    <div class="input-field col s12">
+					      <input name="password" id="password" type="password" class="validate">
+					      <label for="password">Password</label>
+					      {% if form.errors.password %}
+					      	<span class="helper-text red-text text-darken-2">{{ form.errors.password }}</span>
+					      {% endif %}
+					    </div>
+                        <div class="input-field col s12">
+                            <h6>Don't have an account ? <a href="{{ url_for('auth.register') }}">Register</a></h6>
+                        </div>
+					    <div class="input-field col s12 right-align">
+					      <input type="submit" id="submit" value="Login" class="waves-effect waves-light btn-small">
+					    </div>
+					</form>
+		      	</div>
+		    </div>
+		</div>
+	</div>
+{% endblock %}
